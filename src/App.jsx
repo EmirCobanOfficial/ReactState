@@ -1,15 +1,31 @@
+import { useState } from "react";
 import { sculptureList } from "./data";
+
 function App() {
-  let index = 0;
+  const [index, setIndex] = useState(0);
+  const [showMore, setShowMore] = useState(false);
+
   let sculpture = sculptureList[index];
 
   console.log(sculpture);
   function handlePrevious() {
-    console.log("Geri tıklandı");
+    if (index > 0) {
+      setIndex(index - 1);
+    } else {
+      setIndex(sculptureList.length - 1);
+    }
   }
 
   function handleNextClick() {
-    index = index + 1;
+    if (index < sculptureList.length - 1) {
+      setIndex(index + 1);
+    } else {
+      setIndex(0);
+    }
+  }
+
+  function handleMoreClick() {
+    setShowMore(!showMore);
   }
 
   return (
@@ -26,7 +42,13 @@ function App() {
         ({index + 1} of {sculptureList.length})
       </h3>
       <img src={sculpture.url} alt={sculpture.alt} />
-      <p>{sculpture.description}</p>
+      <p>
+        <button onClick={handleMoreClick}>
+          {showMore ? "Hide" : "Show"} Details
+        </button>
+      </p>
+
+      {showMore && <p>{sculpture.description}</p>}
     </>
   );
 }
